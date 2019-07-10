@@ -14,6 +14,8 @@
   var axisHelper;
   var lightHelper;
 
+  var theta = 0;
+
   scene = new THREE.Scene()
 
   box = new THREE.Mesh(
@@ -53,7 +55,19 @@
   renderer.setClearColor(0xefefef);
   renderer.setPixelRatio(window.devicePixelRatio);
   document.getElementById('stage').appendChild(renderer.domElement);
-  renderer.render(scene, camera);
 
+  function render() {
+    requestAnimationFrame(render);
+
+    theta += 0.1;
+    camera.position.x = Math.cos(THREE.Math.degToRad(theta)) * 300;
+    camera.position.z = Math.sin(THREE.Math.degToRad(theta)) * 300;
+    // camera.position.y = Math.tan(THREE.Math.degToRad(theta)) * -300;
+    camera.lookAt(scene.position);
+
+    box.rotation.z += 0.01;
+    renderer.render(scene, camera);
+  }
+  render();
 
 })();
