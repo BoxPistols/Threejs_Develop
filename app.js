@@ -2,7 +2,10 @@
     'use strict';
 
     var scene;
+    var camera;
     var box;
+    var light;
+    var ambient;
     var renderer;
     var width = 500;
     var height = 250;
@@ -15,6 +18,15 @@
     );
     box.position.set(0, 0, 0);
     scene.add(box);
+
+    light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(0, 60, 30);
+    scene.add(light);
+
+    ambient = new THREE.AmbientLight(0x040404);
+    light.position.set(0, 60, 30);
+    scene.add(ambient);
+
 
     camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
     camera.position.set(200, 100, 300);
