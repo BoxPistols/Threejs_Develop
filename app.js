@@ -29,6 +29,13 @@
     })
   );
   box.position.set(0, 0, 0);
+  // box.position.x = 0;
+  // box.position.y = -20;
+  // box.position.z = 20;
+  box.scale.set(2, 1, .5)
+  // box.rotation.x = 45 * Math.PI / 180;
+  box.rotation.set(145 * Math.PI / 180, 0, 0);
+
   scene.add(box);
 
   light = new THREE.DirectionalLight(0xffffff, 1);
@@ -63,13 +70,13 @@
   function render() {
     requestAnimationFrame(render);
 
-    theta += 0.1;
-    camera.position.x = Math.cos(THREE.Math.degToRad(theta)) * 300;
-    camera.position.z = Math.sin(THREE.Math.degToRad(theta)) * 300;
-    // camera.position.y = Math.tan(THREE.Math.degToRad(theta)) * -300;
+    // theta += 0.1;
+    // camera.position.x = Math.cos(THREE.Math.degToRad(theta)) * 300;
+    // camera.position.z = Math.sin(THREE.Math.degToRad(theta)) * 300;
+
     camera.lookAt(scene.position);
 
-    box.rotation.z += 0.01;
+    // box.rotation.z += 0.01;
     renderer.render(scene, camera);
   }
   render();
