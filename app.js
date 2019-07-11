@@ -4,6 +4,11 @@
   var scene;
   var camera;
   var box;
+
+  var head;
+  var body;
+  var person;
+
   var light;
   var ambient;
   var renderer;
@@ -18,25 +23,24 @@
 
   scene = new THREE.Scene()
 
-  box = new THREE.Mesh(
-    new THREE.BoxGeometry(50, 50, 50),
-    new THREE.MeshLambertMaterial({
-      // color: 0xff0000
-      // color: 'teal',
-      color: 'hsl(220, 100%, 60%)',
-      // color: new THREE.Color(0xff0000)
-
-    })
+  head = new THREE.Mesh(
+    new THREE.BoxGeometry(20, 20, 20),
+    new THREE.MeshLambertMaterial({color: 'teal',})
   );
-  box.position.set(0, 0, 0);
-  // box.position.x = 0;
-  // box.position.y = -20;
-  // box.position.z = 20;
-  box.scale.set(2, 1, .5)
-  // box.rotation.x = 45 * Math.PI / 180;
-  box.rotation.set(145 * Math.PI / 180, 0, 0);
+  head.position.set(0, 40, 0);
+  // scene.add(head);
 
-  scene.add(box);
+  body = new THREE.Mesh(
+    new THREE.BoxGeometry(40, 60, 40),
+    new THREE.MeshLambertMaterial({color: 'teal',})
+  );
+  body.position.set(0, 0, 0);
+  // scene.add(body);
+
+  person = new THREE.Group();
+  person.add(head);
+  person.add(body);
+  scene.add(person);
 
   light = new THREE.DirectionalLight(0xffffff, 1);
   light.position.set(0, 60, 30);
@@ -74,8 +78,8 @@
     // camera.position.x = Math.cos(THREE.Math.degToRad(theta)) * 300;
     // camera.position.z = Math.sin(THREE.Math.degToRad(theta)) * 300;
 
-    camera.lookAt(scene.position);
-
+    // camera.lookAt(scene.position);
+    person.rotation.y += 0.01;
     // box.rotation.z += 0.01;
     renderer.render(scene, camera);
   }
