@@ -3,6 +3,10 @@
 
   var scene;
     var box;
+
+    var head;
+    var body;
+
     var light;
     var ambient;
     var camera;
@@ -22,7 +26,9 @@
       new THREE.BoxGeometry(50, 50, 50),
       new THREE.MeshLambertMaterial({ color: 0xff0000 })
     );
-    box.position.set(0, 0, 0);
+    box.position.set(0, 50, 0);
+    // box.scale.set(2,2,2);
+    // box.rotation.set(45 * Math.PI / 180, 45, 45);
     scene.add(box);
 
     // light
