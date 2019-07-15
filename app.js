@@ -6,6 +6,7 @@
 
     var head;
     var body;
+    var person;
 
     var light;
     var ambient;
@@ -22,14 +23,27 @@
     scene = new THREE.Scene();
 
     // mesh 物体
-    box = new THREE.Mesh(
+    head = new THREE.Mesh(
+      new THREE.BoxGeometry(25, 25, 25),
+      new THREE.MeshLambertMaterial({ color: 0xff0000 })
+    );
+    head.position.set(0, 30, 0);
+    // scene.add(head);
+
+    body = new THREE.Mesh(
       new THREE.BoxGeometry(50, 50, 50),
       new THREE.MeshLambertMaterial({ color: 0xff0000 })
     );
-    box.position.set(0, 50, 0);
+    body.position.set(0, 0, 0);
+    // scene.add(body);
+
+    person = new THREE.Group();
+    person.add(head);
+    person.add(body);
+    scene.add(person);
+
     // box.scale.set(2,2,2);
     // box.rotation.set(45 * Math.PI / 180, 45, 45);
-    scene.add(box);
 
     // light
     light = new THREE.DirectionalLight(0xffffff, 1);
@@ -64,8 +78,8 @@
 
     function render() {
       requestAnimationFrame(render);
-
-      controls.update();
+      person.rotation.y += 0.01;
+      // controls.update();
       renderer.render(scene, camera);
     }
     render();
