@@ -1,23 +1,26 @@
 (function() {
   'use strict';
 
-  var scene;
-    var box;
+    let scene;
+    let box;
 
-    var head;
-    var body;
-    var person;
+    let head;
+    let body;
+    let person;
 
-    var light;
-    var ambient;
-    var camera;
-    var gridHelper;
-    var axisHelper;
-    var lightHelper;
-    var renderer;
-    var width = 500;
-    var height = 250;
-    var controls;
+    let sphere;
+    let plane;
+
+    let light;
+    let ambient;
+    let camera;
+    let gridHelper;
+    let axisHelper;
+    let lightHelper;
+    let renderer;
+    let width = 500;
+    let height = 500;
+    let controls;
 
     // scene ステージ
     scene = new THREE.Scene();
@@ -25,14 +28,14 @@
     // mesh 物体
     head = new THREE.Mesh(
       new THREE.BoxGeometry(25, 25, 25),
-      new THREE.MeshLambertMaterial({ color: 0xff0000 })
+      new THREE.MeshLambertMaterial({ color: 0xcc33cc })
     );
     head.position.set(0, 30, 0);
     // scene.add(head);
 
     body = new THREE.Mesh(
       new THREE.BoxGeometry(50, 50, 50),
-      new THREE.MeshLambertMaterial({ color: 0xff0000 })
+      new THREE.MeshLambertMaterial({ color: 0x33cccc })
     );
     body.position.set(0, 0, 0);
     // scene.add(body);
@@ -44,6 +47,21 @@
 
     // box.scale.set(2,2,2);
     // box.rotation.set(45 * Math.PI / 180, 45, 45);
+
+    sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(50),
+      new THREE.MeshLambertMaterial({ color: 0x3333cc })
+    );
+    sphere.position.set(0, 100, 0);
+    scene.add(sphere);
+
+    plane = new THREE.Mesh(
+      new THREE.PlaneGeometry(250, 250),
+      new THREE.MeshLambertMaterial({ color: 0xcc9900, side: THREE.DoubleSide })
+    );
+    plane.position.set(0, -50, 0);
+    plane.rotation.x = 90 * Math.PI / 180;
+    scene.add(plane);
 
     // light
     light = new THREE.DirectionalLight(0xffffff, 1);
@@ -58,16 +76,16 @@
     camera.lookAt(scene.position);
 
     // helper
-    gridHelper = new THREE.GridHelper(200, 50);
+    gridHelper = new THREE.GridHelper(300, 20);
     scene.add(gridHelper);
-    axisHelper = new THREE.AxisHelper(1000);
+    axisHelper = new THREE.AxisHelper(800);
     scene.add(axisHelper);
-    lightHelper = new THREE.DirectionalLightHelper(light, 20);
-    scene.add(lightHelper);
+    // lightHelper = new THREE.DirectionalLightHelper(light, 20);
+    // scene.add(lightHelper);
 
     // controls
     controls = new THREE.OrbitControls(camera);
-    // controls.autoRotate = true;
+    // controls.autoRotate = true; // set controls.update();
 
     // renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -78,8 +96,9 @@
 
     function render() {
       requestAnimationFrame(render);
-      person.rotation.y += 0.01;
-      // controls.update();
+      // person.rotation.y += 0.01;
+
+      controls.update(); // orbit
       renderer.render(scene, camera);
     }
     render();
