@@ -39,7 +39,14 @@
           // box
           box = new THREE.Mesh(
               new THREE.BoxGeometry(120, 120, 120),
-              new THREE.MeshBasicMaterial({ map: texture })
+              // new THREE.MeshLambertMaterial({
+              //   color: 0x333399,
+              //   wireframe: true
+              // })
+              new THREE.MeshBasicMaterial({
+                  map: texture,
+                  color: 0xeeffff,
+              })
           );
           box.position.set(0, 0, 0);
           scene.add(box);
