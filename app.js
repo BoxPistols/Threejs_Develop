@@ -1,31 +1,10 @@
 (function() {
   'use strict';
 
-  let scene;
-  let box;
+  let scene, box, head, body, person, sphere, plane, sphere1, sphere2, sphere3, light, ambient, camera, gridHelper,
+    axisHelper, lightHelper, renderer, width = innerWidth, height = innerHeight, controls;
 
-  let head;
-  let body;
-  let person;
 
-  let sphere;
-  let plane;
-
-  let sphere1;
-  let sphere2;
-  let sphere3;
-
-  let light;
-  let ambient;
-  let camera;
-  let gridHelper;
-  let axisHelper;
-  let lightHelper;
-
-  let renderer;
-  let width = innerWidth;
-  let height = innerHeight;
-  let controls;
   var shadowHelper;
 
   // scene ステージ
