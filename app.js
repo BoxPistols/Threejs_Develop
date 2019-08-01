@@ -1,63 +1,60 @@
-  (function() {
-      'use strict';
+(function() {
+    'use strict';
 
-      var scene;
-      var box;
-      var camera;
-      var renderer;
-      var width = 500;
-      var height = 300;
-      var controls;
-      var loader;
+    var scene;
+    var text;
+    var camera;
+    var renderer;
+    var width = 500;
+    var height = 250;
+    var controls;
+    var loader;
 
-      // scene ステージ
-      scene = new THREE.Scene();
+    // scene ステージ
+    scene = new THREE.Scene();
 
-      // camera
-      camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-      camera.position.set(150, 150, 300);
-      camera.lookAt(scene.position);
+    // camera
+    camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+    camera.position.set(200, 100, 300);
+    camera.lookAt(scene.position);
 
-      // controls
-      controls = new THREE.OrbitControls(camera);
+    // controls
+    controls = new THREE.OrbitControls(camera);
 
-      // renderer
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(width, height);
-      renderer.setClearColor(0xefefef);
-      renderer.setPixelRatio(window.devicePixelRatio);
-      document.getElementById('stage').appendChild(renderer.domElement);
+    // renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setClearColor(0xefefef);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById('stage').appendChild(renderer.domElement);
 
-      // texture
-      loader = new THREE.TextureLoader();
-      loader.load('img/logo.svg', function(texture) {
-          createBox(texture);
-          render();
-      });
+    // texture
+    loader = new THREE.FontLoader();
+    loader.load('js/helvetiker_regular.typeface.js', function(font) {
+        createText(font);
+        render();
+    });
 
-      function createBox(texture) {
-          // box
-          box = new THREE.Mesh(
-              new THREE.BoxGeometry(120, 120, 120),
-              // new THREE.MeshLambertMaterial({
-              //   color: 0x333399,
-              //   wireframe: true
-              // })
-              new THREE.MeshBasicMaterial({
-                  map: texture,
-                  color: 0xeeffff,
-              })
-          );
-          box.position.set(0, 0, 0);
-          scene.add(box);
-      }
+    function createText(font) {
+        // text
+        text = new THREE.Mesh(
+            new THREE.TextGeometry('I am Developper', {
+                font: font,
+                size: 32,
+                height: 12
+            }),
+            new THREE.MeshBasicMaterial({ color: 'teal', side: THREE.DoubleSide })
+        );
+        text.position.set(-180, 0, 0);
+        scene.add(text);
+    }
 
-      function render() {
-          requestAnimationFrame(render);
+    function render() {
+        requestAnimationFrame(render);
 
-          controls.update();
-          renderer.render(scene, camera);
-      }
-      // render();
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    // render();
 
-  })();
+})();
