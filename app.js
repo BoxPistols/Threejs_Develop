@@ -1,8 +1,9 @@
-(function() {
+ (function() {
     'use strict';
 
     var scene;
     var box;
+    var plane;
     var light;
     var ambient;
     var camera;
@@ -10,13 +11,11 @@
     var axisHelper;
     var lightHelper;
     var renderer;
+
     var width = innerWidth;
     var height = innerHeight;
+
     var controls;
-
-    var sphere;
-    var plane;
-
     var shadowHelper;
 
     // scene ステージ
@@ -27,26 +26,18 @@
       new THREE.BoxGeometry(50, 50, 50),
       new THREE.MeshLambertMaterial({ color: 0xff0000 })
     );
-    box.position.set(0, 0, 0);
+    box.position.set(0, 50, 0);
     scene.add(box);
-
-
-    // sphere
-    sphere = new THREE.Mesh(
-      new THREE.SphereGeometry(50, 20, 20),
-      new THREE.MeshPhongMaterial({ color: 0x4caf50 })
-    );
-    sphere.position.set(100, 0, 0);
-    scene.add(sphere);
 
     // plane
     plane = new THREE.Mesh(
       new THREE.PlaneGeometry(200, 200),
       new THREE.MeshLambertMaterial({ color: 0x0096d6, side: THREE.DoubleSide })
     );
-    plane.position.set(0, -50, 0);
+    plane.position.set(0, 0, 0);
     plane.rotation.x = 90 * Math.PI / 180;
     scene.add(plane);
+
 
     // light
     light = new THREE.DirectionalLight(0xffffff, 1);
@@ -70,7 +61,6 @@
 
     // controls
     controls = new THREE.OrbitControls(camera);
-    // controls.autoRotate = true;
 
     // renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -82,16 +72,21 @@
     // shadow
     renderer.shadowMap.enabled = true;
     light.castShadow = true;
-    light.shadow.camera.left(-200,200,200);
+    light.shadow.camera.left = -20;
+    light.shadow.camera.right = 20;
+    light.shadow.camera.top = 20;
+    light.shadow.camera.bottom = -20;
     shadowHelper = new THREE.CameraHelper(light.shadow.camera);
     scene.add(shadowHelper);
+    box.castShadow = true;
+    plane.receiveShadow = true;
 
     function render() {
-        requestAnimationFrame(render);
+      requestAnimationFrame(render);
 
-        controls.update();
-        renderer.render(scene, camera);
+      controls.update();
+      renderer.render(scene, camera);
     }
     render();
 
-})();
+  })();
