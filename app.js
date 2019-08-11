@@ -17,6 +17,8 @@
     var sphere;
     var plane;
 
+    var shadowHelper;
+
     // scene ステージ
     scene = new THREE.Scene();
 
@@ -28,10 +30,11 @@
     box.position.set(0, 0, 0);
     scene.add(box);
 
+
     // sphere
     sphere = new THREE.Mesh(
       new THREE.SphereGeometry(50, 20, 20),
-      new THREE.MeshLambertMaterial({ color: 0x4caf50 })
+      new THREE.MeshPhongMaterial({ color: 0x4caf50 })
     );
     sphere.position.set(100, 0, 0);
     scene.add(sphere);
@@ -75,6 +78,13 @@
     renderer.setClearColor(0xefefef);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.getElementById('stage').appendChild(renderer.domElement);
+
+    // shadow
+    renderer.shadowMap.enabled = true;
+    light.castShadow = true;
+    light.shadow.camera.left(-200,200,200);
+    shadowHelper = new THREE.CameraHelper(light.shadow.camera);
+    scene.add(shadowHelper);
 
     function render() {
         requestAnimationFrame(render);
