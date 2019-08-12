@@ -7,8 +7,8 @@
   var ambient;
   var camera;
   var renderer;
-  var width = 500;
-  var height = 250;
+  var width = innerWidth;
+  var height = innerHeight;
   var controls;
 
   var count = 200;
@@ -46,7 +46,7 @@
 
   // picking
   for (i = 0; i < count; i++) {
-    size = Math.random() * 20 + 10;
+    size = Math.random() * 20 + 3;
     box = new THREE.Mesh(
       new THREE.BoxGeometry(size, size, size),
       new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
@@ -61,7 +61,7 @@
 
   // 1. マウス座標の取得
   document.addEventListener('mousemove', function(e) {
-    var rect = e.target.getBoundingClientRect();
+    let rect = e.target.getBoundingClientRect();
     // 2. WebGLの座標系に変換
     mouse.x = (e.clientX - rect.left) / width * 2 - 1;
     mouse.y = (e.clientY - rect.top) / height * -1 * 2 + 1;
@@ -79,8 +79,9 @@
     // 4. 光線にあたった物体を取得、操作
     objs = raycaster.intersectObjects(scene.children);
     if (objs.length > 0) {
-      objs[0].object.material.emissive = new THREE.Color(0x999999);
+      objs[0].object.material.emissive = new THREE.Color("teal");
     }
+
 
     controls.update();
     renderer.render(scene, camera);
