@@ -4,8 +4,8 @@
     var scene;
     var camera;
     var renderer;
-    var width = 500;
-    var height = 250;
+    var width = 1000;
+    var height = 1000;
     var controls;
 
     var particles;
@@ -19,9 +19,6 @@
     camera.position.set(100, 100, 100);
     camera.lookAt(scene.position);
 
-    // controls
-    controls = new THREE.OrbitControls(camera);
-
     // renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
@@ -31,8 +28,8 @@
 
     // particles
     // mesh: Points
-    // - geometry: 図形の頂点
-    // - material: PointsMaterial
+    // geometry: 図形の頂点
+    // material: PointsMaterial
     loader = new THREE.TextureLoader();
     loader.load('img/star.png', function(texture) {
       createParticles(texture);
@@ -42,7 +39,7 @@
     function createParticles(texture) {
       var pGeometry;
       var pMaterial;
-      var count = 200;
+      var count = 2000;
       var i;
 
       // pGeometry
@@ -50,7 +47,8 @@
       for (i = 0; i < count; i++) {
         pGeometry.vertices.push(
           new THREE.Vector3(
-            Math.random() * 200 - 100,
+
+            Math.random() * 200 - 100, // -100~100の乱数
             Math.random() * 200 - 100,
             Math.random() * 200 - 100
           )
@@ -60,10 +58,10 @@
       // pMaterial
       pMaterial = new THREE.PointsMaterial({
         map: texture,
-        size: 32,
-        blending: THREE.AdditiveBlending,
-        transparent: true,
-        depthTest: false
+        size: 3, // サイズ
+        blending: THREE.AdditiveBlending, // ブレンドモード(加算)
+        transparent: true, // 透過true
+        depthTest: false // 物体が重なった時に後ろにあるものを描画するかしないか
       });
 
       particles = new THREE.Points(pGeometry, pMaterial);
@@ -72,11 +70,8 @@
 
     function render() {
       requestAnimationFrame(render);
-
-      particles.rotation.y += 0.001;
-      controls.update();
+      particles.rotation.y += 0.002;
       renderer.render(scene, camera);
     }
-    // render();
 
   })();
