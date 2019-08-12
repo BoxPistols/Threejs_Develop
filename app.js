@@ -1,15 +1,15 @@
  (function() {
     'use strict';
 
-    var scene;
-    var camera;
-    var renderer;
-    var width = 1000;
-    var height = 1000;
-    var controls;
+    let scene;
+    let camera;
+    let renderer;
+    let width = innerWidth;
+    let height = innerHeight;
+    let controls;
 
-    var particles;
-    var loader;
+    let particles;
+    let loader;
 
     // scene ステージ
     scene = new THREE.Scene();
@@ -37,9 +37,9 @@
     });
 
     function createParticles(texture) {
-      var pGeometry;
+      let pGeometry;
       var pMaterial;
-      var count = 2000;
+      var count = 1000;
       var i;
 
       // pGeometry
@@ -58,7 +58,7 @@
       // pMaterial
       pMaterial = new THREE.PointsMaterial({
         map: texture,
-        size: 3, // サイズ
+        size: 5, // サイズ
         blending: THREE.AdditiveBlending, // ブレンドモード(加算)
         transparent: true, // 透過true
         depthTest: false // 物体が重なった時に後ろにあるものを描画するかしないか
@@ -70,7 +70,9 @@
 
     function render() {
       requestAnimationFrame(render);
+      particles.rotation.x += 0.001;
       particles.rotation.y += 0.002;
+      particles.rotation.z += 0.003;
       renderer.render(scene, camera);
     }
 
