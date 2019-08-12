@@ -1,92 +1,60 @@
+// ページの読み込みを待つ
+window.addEventListener('load', init);
 
-(function() {
-  'use strict';
+function init() {
 
-  var scene;
-  var light;
-  var ambient;
-  var camera;
-  var renderer;
-  var width = innerWidth;
-  var height = innerHeight;
-  var controls;
+  // サイズを指定
+  const width = 960;
+  const height = 540;
 
-  var count = 200;
-  var i;
-  var size;
-  var box;
-
-  var mouse = new THREE.Vector2(-2, -2);
-
-  // scene ステージ
-  scene = new THREE.Scene();
-
-  // light
-  light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(0, 100, 30);
-  scene.add(light);
-  ambient = new THREE.AmbientLight(0x404040);
-  scene.add(ambient);
-
-  // camera
-  camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-  camera.position.set(200, 100, 300);
-  camera.lookAt(scene.position);
-
-  // controls
-  controls = new THREE.OrbitControls(camera);
-  controls.autoRotate = true;
-
-  // renderer
-  renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(width, height);
-  renderer.setClearColor(0xefefef);
-  renderer.setPixelRatio(window.devicePixelRatio);
-  document.getElementById('stage').appendChild(renderer.domElement);
-
-  // picking
-  for (i = 0; i < count; i++) {
-    size = Math.random() * 20 + 3;
-    box = new THREE.Mesh(
-      new THREE.BoxGeometry(size, size, size),
-      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
-    );
-    box.position.set(
-      Math.random() * 200 - 100,
-      Math.random() * 200 - 100,
-      Math.random() * 200 - 100
-    );
-    scene.add(box);
-  }
-
-  // 1. マウス座標の取得
-  document.addEventListener('mousemove', function(e) {
-    let rect = e.target.getBoundingClientRect();
-    // 2. WebGLの座標系に変換
-    mouse.x = (e.clientX - rect.left) / width * 2 - 1;
-    mouse.y = (e.clientY - rect.top) / height * -1 * 2 + 1;
+  // レンダラーを作成
+  const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector('#myCanvas')
   });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(width, height);
 
-  function render() {
-    var raycaster = new THREE.Raycaster();
-    var objs;
+  // シーンを作成
+  const scene = new THREE.Scene();
 
-    requestAnimationFrame(render);
+  // カメラを作成
+  // THREE.PerspectiveCameraクラスのコンストラクターで
+  // 画角、アスペクト比、描画開始距離、描画終了距離の4つの情報を引数として渡しカメラを作成
+  const camera = new THREE.PerspectiveCamera(45, width / height);
+  camera.position.set(0, 0, +1000);
 
-    // 3. マウスから3D空間に光線を射出
-    raycaster.setFromCamera(mouse, camera);
+  // 箱を作成
+  // 立方体はメッシュという表示オブジェクトを使用して作成
+  // メッシュを作るには、ジオメトリ（形状）とマテリアル（素材）の二種類を用意
+  // ジオメトリ: 頂点情報や面情報
+  // (幅, 高さ, 奥行き)
+  const geometry = new THREE.BoxGeometry(400, 400, 400);
+  // マテリアル: 色や質感の情報
+  const material = new THREE.MeshNormalMaterial();
+  // 作成したジオメトリとマテリアルを使って、メッシュを作る。
+  const box = new THREE.Mesh(geometry, material);
+  // 作成したメッシュをシーンに追加
+  scene.add(box);
 
-    // 4. 光線にあたった物体を取得、操作
-    objs = raycaster.intersectObjects(scene.children);
-    if (objs.length > 0) {
-      objs[0].object.material.emissive = new THREE.Color("teal");
-    }
+
+  // アニメーション
+  // JavaScriptでアニメーションをさせるには、時間経過で関数を呼び続ける必要がある
 
 
-    controls.update();
-    renderer.render(scene, camera);
+  tick();
+
+  // 毎フレーム時に実行されるループイベントです
+  function tick() {
+
+    // アニメーション
+    box.rotation. y += 0.01;
+
+    // 明示的に画面が更新されるように命令を書く
+    // renderer.render()という命令で更新を指示
+    renderer.render(scene, camera); // レンダリング
+
+    // requestAnimationFrame(): グローバルメソッド
+      // 引数として渡された関数を、毎フレーム実行する
+    requestAnimationFrame(tick);
   }
-  render();
-
-})();
- 
+}
