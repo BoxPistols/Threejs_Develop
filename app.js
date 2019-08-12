@@ -1,79 +1,91 @@
- (function() {
-    'use strict';
 
-    let scene;
-    let camera;
-    let renderer;
-    let width = innerWidth;
-    let height = innerHeight;
-    let controls;
+(function() {
+  'use strict';
 
-    let particles;
-    let loader;
+  var scene;
+  var light;
+  var ambient;
+  var camera;
+  var renderer;
+  var width = 500;
+  var height = 250;
+  var controls;
 
-    // scene ステージ
-    scene = new THREE.Scene();
+  var count = 200;
+  var i;
+  var size;
+  var box;
 
-    // camera
-    camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
-    camera.position.set(100, 100, 100);
-    camera.lookAt(scene.position);
+  var mouse = new THREE.Vector2(-2, -2);
 
-    // renderer
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
-    renderer.setClearColor(0x000000);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    document.getElementById('stage').appendChild(renderer.domElement);
+  // scene ステージ
+  scene = new THREE.Scene();
 
-    // particles
-    // mesh: Points
-    // geometry: 図形の頂点
-    // material: PointsMaterial
-    loader = new THREE.TextureLoader();
-    loader.load('img/star.png', function(texture) {
-      createParticles(texture);
-      render();
-    });
+  // light
+  light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(0, 100, 30);
+  scene.add(light);
+  ambient = new THREE.AmbientLight(0x404040);
+  scene.add(ambient);
 
-    function createParticles(texture) {
-      let pGeometry;
-      var pMaterial;
-      var count = 1000;
-      var i;
+  // camera
+  camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+  camera.position.set(200, 100, 300);
+  camera.lookAt(scene.position);
 
-      // pGeometry
-      pGeometry = new THREE.Geometry();
-      for (i = 0; i < count; i++) {
-        pGeometry.vertices.push(
-          new THREE.Vector3(
+  // controls
+  controls = new THREE.OrbitControls(camera);
+  controls.autoRotate = true;
 
-            Math.random() * 200 - 100, // -100~100の乱数
-            Math.random() * 200 - 100,
-            Math.random() * 200 - 100
-          )
-        );
-      }
+  // renderer
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
+  renderer.setClearColor(0xefefef);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.getElementById('stage').appendChild(renderer.domElement);
 
-      // pMaterial
-      pMaterial = new THREE.PointsMaterial({
-        map: texture,
-        size: 5, // サイズ
-        blending: THREE.AdditiveBlending, // ブレンドモード(加算)
-        transparent: true, // 透過true
-        depthTest: false // 物体が重なった時に後ろにあるものを描画するかしないか
-      });
+  // picking
+  for (i = 0; i < count; i++) {
+    size = Math.random() * 20 + 10;
+    box = new THREE.Mesh(
+      new THREE.BoxGeometry(size, size, size),
+      new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff })
+    );
+    box.position.set(
+      Math.random() * 200 - 100,
+      Math.random() * 200 - 100,
+      Math.random() * 200 - 100
+    );
+    scene.add(box);
+  }
 
-      particles = new THREE.Points(pGeometry, pMaterial);
-      scene.add(particles);
+  // 1. マウス座標の取得
+  document.addEventListener('mousemove', function(e) {
+    var rect = e.target.getBoundingClientRect();
+    // 2. WebGLの座標系に変換
+    mouse.x = (e.clientX - rect.left) / width * 2 - 1;
+    mouse.y = (e.clientY - rect.top) / height * -1 * 2 + 1;
+  });
+
+  function render() {
+    var raycaster = new THREE.Raycaster();
+    var objs;
+
+    requestAnimationFrame(render);
+
+    // 3. マウスから3D空間に光線を射出
+    raycaster.setFromCamera(mouse, camera);
+
+    // 4. 光線にあたった物体を取得、操作
+    objs = raycaster.intersectObjects(scene.children);
+    if (objs.length > 0) {
+      objs[0].object.material.emissive = new THREE.Color(0x999999);
     }
 
-    function render() {
-      requestAnimationFrame(render);
-      particles.rotation.x += 0.001;
-      particles.rotation.y += 0.002;
-      particles.rotation.z += 0.003;
-      renderer.render(scene, camera);
-    }
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  render();
 
-  })();
+})();
+ 
